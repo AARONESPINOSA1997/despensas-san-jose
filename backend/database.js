@@ -1,6 +1,6 @@
 // database.js - Configuración de la base de datos
 const sqlite3 = require('sqlite3').verbose();
-const bcryptjs = require('bcryptjsjs');
+const bcryptjs = require('bcryptjs');
 const path = require('path');
 
 const dbPath = path.join(__dirname, 'despensas.db');

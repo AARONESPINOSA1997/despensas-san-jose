@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const bcryptjs = require('bcryptjsjs');
+const bcrypt = require('bcryptjs');
 const db = require('./database');
 
 const app = express();
