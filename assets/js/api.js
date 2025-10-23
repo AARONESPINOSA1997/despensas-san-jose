@@ -56,7 +56,7 @@ class API {
   // ============================================
 
   async login(usuario, password) {
-    const data = await this.request('/auth/login', 'POST', { usuario, password });
+    const data = await this.request('/api/auth/login', 'POST', { usuario, password });
     this.setToken(data.token);
     return data;
   }
@@ -143,3 +143,6 @@ class API {
 
 // Instancia global
 window.api = new API();
+
+// Fix login route to /api/auth/login
+
