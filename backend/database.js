@@ -1,6 +1,6 @@
 // database.js - Configuración de la base de datos
 const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjsjs');
 const path = require('path');
 
 const dbPath = path.join(__dirname, 'despensas.db');
@@ -79,7 +79,7 @@ db.serialize(() => {
     console.log('📦 Creando datos de prueba...');
 
     // Usuarios de prueba (password: "123456" para todos)
-    const passwordHash = await bcrypt.hash('123456', 10);
+    const passwordHash = await bcryptjs.hash('123456', 10);
 
     const usuarios = [
       {

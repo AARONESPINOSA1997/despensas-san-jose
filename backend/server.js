@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjsjs');
 const db = require('./database');
 
 const app = express();
@@ -93,7 +93,7 @@ app.post('/api/auth/login', (req, res) => {
       return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
     }
 
-    const passwordValido = await bcrypt.compare(password, user.password);
+    const passwordValido = await bcryptjs.compare(password, user.password);
     
     if (!passwordValido) {
       return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
