@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dashboard • Despensas San José</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <!-- Badge Caja San Rafael -->
+  <div class="client-badge-global">
+    Caja Popular San Rafael
+  </div>
+
+  <aside>
+    <div class="brand">
+      <img src="logo.png" alt="Despensas San José"/>
+      <strong>DESPENSAS</strong>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="pos.html">Entregas (POS)</a>
+      <a href="socios.html">Socios</a>
+      <a href="#" onclick="alert('Próximamente 🙂'); return false;">Usuarios & Roles</a>
+    </nav>
+  </aside>
+
+  <main>
+    <h1>Dashboard</h1>
+
+    <div class="pills">
+      <span class="pill">ASIGNADAS: <strong id="totMeta">0</strong></span>
+      <span class="pill">EN STOCK: <strong id="totStock">0</strong></span>
+      <span class="pill">ENTREGADAS: <strong id="totEnt">0</strong></span>
+    </div>
+
+    <section class="grid" id="grid"></section>
+  </main>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+  
+  <script>
+    if (!sessionStorage.getItem('dsj_logged_in')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+  <script src="assets/js/menu-control.js"></script>
+</body>
+</html>

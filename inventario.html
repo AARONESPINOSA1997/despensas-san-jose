@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventario • Despensas San José</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <!-- Badge Caja San Rafael -->
+  <div class="client-badge-global">
+    Caja Popular San Rafael
+  </div>
+
+  <aside>
+    <div class="brand">
+      <img src="logo.png" alt="Despensas San José"/>
+      <strong>DESPENSAS</strong>
+    </div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="inventario.html" class="active">Inventario</a>
+      <a href="pos.html">Entregas (POS)</a>
+      <a href="socios.html">Socios</a>
+      <a href="#" onclick="alert('Próximamente 🙂'); return false;">Usuarios & Roles</a>
+    </nav>
+  </aside>
+
+  <main>
+    <h1>Inventario</h1>
+
+    <section class="panel">
+      <header>BODEGA</header>
+      <div class="toolbar">
+        <span class="badge">Existencia en Bodega: <strong id="badgeBodega">0</strong></span>
+        <span class="badge">Asignado a Sucursales: <strong id="badgeAsignado">0</strong></span>
+
+        <span style="margin-left:auto"></span>
+
+        <label>Surtir a sucursal:</label>
+        <select id="selSucursal"></select>
+        <input id="inpCantidad" type="number" min="1" step="1" value="100"/>
+        <button id="btnAsignar">Asignar desde Bodega</button>
+        <button id="btnReset" class="btn-ghost" title="Volver a 10,500 en bodega y 0 en sucursales">Reset demo</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>Sucursales</header>
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Sucursal</th>
+              <th class="right">ASIGNADAS (meta)</th>
+              <th class="right">En Sucursal</th>
+              <th class="right">Devolver a Bodega</th>
+              <th style="text-align:center; min-width:150px;">ACCIÓN</th>
+            </tr>
+          </thead>
+          <tbody id="tbodySuc"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/inventario.js"></script>
+
+  <script>
+    if (!sessionStorage.getItem('dsj_logged_in')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+  <script src="assets/js/menu-control.js"></script>
+</body>
+</html>

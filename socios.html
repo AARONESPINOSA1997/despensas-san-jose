@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Socios • Despensas San José</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .toolbar-socios {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 20px;
+      flex-wrap: wrap;
+      background: #f9fafb;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toolbar-socios input[type="text"] {
+      flex: 1;
+      min-width: 250px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .toolbar-socios select {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .toolbar-socios button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #000;
+      color: #fff;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: #fff;
+    }
+
+    .btn-export {
+      background: #0066cc;
+      color: #fff;
+    }
+
+    .badge-status {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-entregado {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge-pendiente {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-warning {
+      background: #f59e0b;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 20px;
+      align-items: center;
+    }
+
+    .pagination button {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination .active {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      background: #e5e7eb;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <div class="client-badge-global">
+    Caja Popular San Rafael
+  </div>
+
+  <aside>
+    <div class="brand">
+      <img src="logo.png" alt="Despensas San José"/>
+      <strong>DESPENSAS</strong>
+    </div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="pos.html">Entregas (POS)</a>
+      <a href="socios.html" class="active">Socios</a>
+      <a href="#" onclick="alert('Próximamente 🙂'); return false;">Usuarios & Roles</a>
+    </nav>
+  </aside>
+
+  <main>
+    <h1>Gestión de Socios</h1>
+
+    <section class="panel">
+      <header>
+        Base de Datos de Socios
+        <span style="font-weight:400;font-size:14px;margin-left:10px;" id="totalSocios"></span>
+      </header>
+
+      <div class="toolbar-socios">
+        <input type="text" id="searchSocios" placeholder="🔍 Buscar por número o nombre...">
+        
+        <select id="filtroEstatus">
+          <option value="todos">Todos</option>
+          <option value="pendientes">Pendientes</option>
+          <option value="entregados">Entregados</option>
+        </select>
+
+        <button class="btn-success" id="btnAgregarSocio">➕ Agregar Socio</button>
+        <button onclick="importarExcel()" style="background:#10b981;">
+  📥 Importar desde Excel
+</button>
+<input type="file" id="fileExcel" accept=".xlsx,.xls" style="display:none;" onchange="procesarExcel(event)" />
+       <button class="btn-export" id="btnExportar">💾 Exportar a Excel</button>
+      </div>
+
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Nombre</th>
+              <th>Credencial</th>
+              <th>Estatus</th>
+              <th class="right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaSocios">
+            <tr>
+              <td colspan="5" style="text-align:center;padding:20px;">Cargando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="paginacion"></div>
+    </section>
+  </main>
+
+  <!-- Modal Agregar Socio -->
+  <div class="modal" id="modalAgregar">
+    <div class="modal-content">
+      <div class="modal-header">➕ Agregar Nuevo Socio</div>
+      <div class="form-group">
+        <label for="nuevoNumero">Número de Socio *</label>
+        <input type="text" id="nuevoNumero" placeholder="Ej. 010501" required>
+      </div>
+      <div class="form-group">
+        <label for="nuevoNombre">Nombre Completo *</label>
+        <input type="text" id="nuevoNombre" placeholder="Ej. Juan Pérez García" required>
+      </div>
+      <div class="form-group">
+        <label for="nuevaCredencial">Credencial (opcional)</label>
+        <input type="text" id="nuevaCredencial" placeholder="Se usará el número de socio si está vacío">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sm btn-cancel" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-sm btn-success" id="btnGuardarSocio">Guardar</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/socios.js"></script>
+  
+  <script>
+    if (!sessionStorage.getItem('dsj_logged_in')) {
+      window.location.href = 'index.html';
+    }
+    
+    // Verificar permisos
+    const rol = sessionStorage.getItem('dsj_rol');
+    if (rol !== 'super' && rol !== 'admin') {
+      alert('⚠️ No tienes permisos para acceder a esta sección');
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+  <script src="assets/js/menu-control.js"></script>
+</body>
+</html>

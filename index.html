@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Despensas San José</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body class="login-page">
+  <div class="client-badge">
+    <img src="caja-san-rafael.png" alt="Caja San Rafael" />
+  </div>
+  
+  <img class="logo-main" src="logo.png" alt="Logo Despensas San José" />
+
+  <div class="login-box">
+    <div id="error" class="error"></div>
+    
+    <label for="user">Número de Usuario</label>
+    <input type="text" id="user" name="user" placeholder="Ej. super_admin" />
+    
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" name="password" placeholder="123456" />
+    
+    <div class="remember">
+      <input type="checkbox" id="remember" />
+      <label for="remember">Recuérdame</label>
+    </div>
+    
+    <button id="btnLogin">ACCEDER</button>
+  </div>
+
+  <div class="footer">
+    <p>Dando es como se recibe</p>
+    <a href="https://www.despensassanjose.com">www.despensassanjose.com</a>
+  </div>
+
+  <!-- Cargar API primero -->
+  <script src="assets/js/api.js"></script>
+
+  <script>
+    const btnLogin = document.getElementById('btnLogin');
+    const inputUser = document.getElementById('user');
+    const inputPass = document.getElementById('password');
+    const errorDiv = document.getElementById('error');
+    const rememberCheck = document.getElementById('remember');
+
+    // Cargar usuario recordado
+    const savedUser = localStorage.getItem('dsj_remembered_user');
+    if (savedUser) {
+      inputUser.value = savedUser;
+      rememberCheck.checked = true;
+    }
+
+    function showError(msg) {
+      errorDiv.textContent = msg;
+      errorDiv.classList.add('show');
+      setTimeout(() => errorDiv.classList.remove('show'), 4000);
+    }
+
+    // Login con API real
+    btnLogin.addEventListener('click', async () => {
+      const user = inputUser.value.trim();
+      const pass = inputPass.value.trim();
+
+      if (!user || !pass) {
+        showError('Por favor ingresa usuario y contraseña');
+        return;
+      }
+
+      btnLogin.disabled = true;
+      btnLogin.textContent = 'Accediendo...';
+
+      try {
+        // Llamar a la API
+        const response = await window.api.login(user, pass);
+
+        // ✅ GUARDAR EL TOKEN (LÍNEA CRÍTICA AGREGADA)
+        sessionStorage.setItem('token', response.token);
+
+        // Guardar datos del usuario
+        sessionStorage.setItem('dsj_logged_in', 'true');
+        sessionStorage.setItem('dsj_user', response.usuario.usuario);
+        sessionStorage.setItem('dsj_nombre', response.usuario.nombre);
+        sessionStorage.setItem('dsj_rol', response.usuario.rol);
+        sessionStorage.setItem('dsj_sucursales', response.usuario.sucursales_permitidas);
+
+        // Recordar usuario si está marcado
+        if (rememberCheck.checked) {
+          localStorage.setItem('dsj_remembered_user', user);
+        } else {
+          localStorage.removeItem('dsj_remembered_user');
+        }
+
+        // Redirigir al dashboard
+        window.location.href = 'dashboard.html';
+
+      } catch (error) {
+        showError(error.message || 'Error al iniciar sesión');
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'ACCEDER';
+      }
+    });
+
+    // Enter para enviar
+    inputPass.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') btnLogin.click();
+    });
+    inputUser.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') inputPass.focus();
+    });
+  </script>
+</body>
+</html>
