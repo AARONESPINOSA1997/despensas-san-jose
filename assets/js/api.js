@@ -1,5 +1,5 @@
 // api.js - Cliente para comunicarse con el backend
-const API_URL = 'https://despensas-san-jose-production.up.railway.app';
+const API_URL = 'https://despensas-san-jose.onrender.com';
 
 class API {
   constructor() {

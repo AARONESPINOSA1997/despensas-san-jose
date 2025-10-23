@@ -28,7 +28,7 @@ async function cargarSocios(page = 1) {
       filtro: filtroActual
     });
 
-    const response = await fetch(`https://despensas-san-jose-production.up.railway.app/api/socios?${params}`, {
+    const response = await fetch(`https://despensas-san-jose.onrender.com/api/socios?${params}`, {
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       }
@@ -146,7 +146,7 @@ $('#btnGuardarSocio').addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('https://despensas-san-jose-production.up.railway.app/api/socios', {
+    const response = await fetch('https://despensas-san-jose.onrender.com/api/socios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -190,7 +190,7 @@ window.cambiarEstatus = async (id, estatusActual) => {
   }
 
   try {
-    const response = await fetch(`https://despensas-san-jose-production.up.railway.app/api/socios/${id}/estatus`, {
+    const response = await fetch(`https://despensas-san-jose.onrender.com/api/socios/${id}/estatus`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -226,7 +226,7 @@ window.eliminarSocio = async (id, numero, nombre) => {
   }
 
   try {
-    const response = await fetch(`https://despensas-san-jose-production.up.railway.app/api/socios/${id}`, {
+    const response = await fetch(`https://despensas-san-jose.onrender.com/api/socios/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
@@ -254,7 +254,7 @@ btnExportar.addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('https://despensas-san-jose-production.up.railway.app/api/socios?limit=999999', {
+    const response = await fetch('https://despensas-san-jose.onrender.com/api/socios?limit=999999', {
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       }
@@ -349,7 +349,7 @@ async function procesarExcel(event) {
     
     // Si es reemplazar, borrar todos primero
     if (accion === 'reemplazar') {
-      const response = await fetch('https://despensas-san-jose-production.up.railway.app/api/socios/borrar-todos', {
+      const response = await fetch('https://despensas-san-jose.onrender.com/api/socios/borrar-todos', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -374,7 +374,7 @@ async function procesarExcel(event) {
           continue;
         }
         
-        const response = await fetch('https://despensas-san-jose-production.up.railway.app/api/socios', {
+        const response = await fetch('https://despensas-san-jose.onrender.com/api/socios', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
