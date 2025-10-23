@@ -85,26 +85,22 @@ app.post('/api/auth/login', (req, res) => {
   const { usuario, password } = req.body;
 
   db.get('SELECT * FROM usuarios WHERE usuario = ?', [usuario], async (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error del servidor' });
-    }
+    if (err) return res.status(500).json({ error: 'Error del servidor' });
+    if (!user) return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
-    }
+    // 👇 aquí estaba el error
+    const passwordValido = await bcrypt.compare(password, user.password);
 
-    const passwordValido = await bcryptjs.compare(password, user.password);
-    
     if (!passwordValido) {
       return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
     }
 
     const token = jwt.sign(
-      { 
-        id: user.id, 
-        usuario: user.usuario, 
+      {
+        id: user.id,
+        usuario: user.usuario,
         rol: user.rol,
-        sucursales_permitidas: user.sucursales_permitidas 
+        sucursales_permitidas: user.sucursales_permitidas
       },
       JWT_SECRET,
       { expiresIn: '8h' }
