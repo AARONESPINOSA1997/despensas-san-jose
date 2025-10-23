@@ -1,5 +1,5 @@
 // api.js - Cliente para comunicarse con el backend
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://despensas-san-jose-production.up.railway.app';
 
 class API {
   constructor() {
