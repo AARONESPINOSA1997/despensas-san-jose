@@ -39,11 +39,11 @@ class API {
     try {
       const response = await fetch(`${API_URL}${endpoint}`, options);
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.error || 'Error en la petición');
       }
-
+      
       return data;
     } catch (error) {
       console.error('Error en API:', error);
@@ -54,7 +54,7 @@ class API {
   // ============================================
   // AUTENTICACIÓN
   // ============================================
-
+  
   async login(usuario, password) {
     const data = await this.request('/api/auth/login', 'POST', { usuario, password });
     this.setToken(data.token);
@@ -71,28 +71,28 @@ class API {
   // ============================================
   // DASHBOARD
   // ============================================
-
+  
   async getDashboard() {
-    return await this.request('/dashboard');
+    return await this.request('/api/dashboard');
   }
 
   // ============================================
   // INVENTARIO
   // ============================================
-
+  
   async getInventario() {
-    return await this.request('/inventario');
+    return await this.request('/api/inventario');
   }
 
   async asignarDesdeBodega(sucursal_id, cantidad) {
-    return await this.request('/inventario/asignar', 'POST', { 
+    return await this.request('/api/inventario/asignar', 'POST', { 
       sucursal_id, 
       cantidad 
     });
   }
 
   async devolverABodega(sucursal_id, cantidad) {
-    return await this.request('/inventario/devolver', 'POST', { 
+    return await this.request('/api/inventario/devolver', 'POST', { 
       sucursal_id, 
       cantidad 
     });
@@ -101,13 +101,13 @@ class API {
   // ============================================
   // POS / SOCIOS
   // ============================================
-
+  
   async buscarSocios(query) {
-    return await this.request(`/socios/buscar?query=${encodeURIComponent(query)}`);
+    return await this.request(`/api/socios/buscar?query=${encodeURIComponent(query)}`);
   }
 
   async registrarEntrega(socio_id, sucursal_id, cantidad, quien_recoge) {
-    return await this.request('/pos/entregar', 'POST', {
+    return await this.request('/api/pos/entregar', 'POST', {
       socio_id,
       sucursal_id,
       cantidad,
@@ -118,14 +118,14 @@ class API {
   // ============================================
   // GESTIÓN DE SOCIOS (NUEVO)
   // ============================================
-
+  
   async getSocios(page, limit, search, filtro) {
     const params = new URLSearchParams({ page, limit, search, filtro });
-    return await this.request(`/socios?${params}`);
+    return await this.request(`/api/socios?${params}`);
   }
 
   async agregarSocio(numero_socio, nombre, credencial) {
-    return await this.request('/socios', 'POST', {
+    return await this.request('/api/socios', 'POST', {
       numero_socio,
       nombre,
       credencial
@@ -133,16 +133,13 @@ class API {
   }
 
   async cambiarEstatusSocio(id, entregado) {
-    return await this.request(`/socios/${id}/estatus`, 'PATCH', { entregado });
+    return await this.request(`/api/socios/${id}/estatus`, 'PATCH', { entregado });
   }
 
   async eliminarSocio(id) {
-    return await this.request(`/socios/${id}`, 'DELETE');
+    return await this.request(`/api/socios/${id}`, 'DELETE');
   }
 }
 
 // Instancia global
 window.api = new API();
-
-// Fix login route to /api/auth/login
-
